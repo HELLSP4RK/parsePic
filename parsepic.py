@@ -43,7 +43,7 @@ def main(amount, hash_length, save):
             if html_save_method(save):
                 save_html(page, link, date)
             else:
-                save_picture(path, link)
+                save_picture(link, path, hash)
 
 
 def check_args(amount, hash_length, save):
@@ -97,7 +97,7 @@ def save_html(page, link, date):
         html.write(page.render())
 
 
-def save_picture(path, link):
+def save_picture(link, path, hash):
     image = Image.open(BytesIO(link.content))
     image.save(f'{path}\\{hash}.gif', 'GIF')
 

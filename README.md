@@ -18,8 +18,8 @@ Options:
   every picture.
 
   `-s, --save TEXT`            How do you want to save the pictures? All parameters save it to _[current working
-  directory]\parsePic\_, but "html" saves it to _...\[today's date].html document_, and "pic" saves it to
-  _...\[today's date] folder_. By default, it's equal to "html".
+  directory]\\parsePic\\_, but "html" saves it to _...\\[today's date].html document_, and "pic" saves it to
+  _...\\[today's date] folder_. By default, it's equal to "html".
 
 
   `--help`                     Show this message and exit.
