@@ -22,16 +22,19 @@ from dominate.tags import img, style, p
               help="""How do you want to save the pictures? All parameters save it to
               [current working directory]\\parsePic\\, but "html" saves it to  ...\\[today's date].html document,
               and "pic" saves it to ...\\[today's date] folder. By default, it's equal to "html".""")
-def main(amount, hash_length, save):
+@click.option('--path', '-p', default=f'{os.getcwd()}',
+              help="""Where do you want to save the pictures? You can set the path to save in "C:\\path\\to\\directory"
+              format. By default, it's equal to current working directory.""")
+def main(amount, hash_length, save, path):
     """This little tool parses random pictures from https://imgur.com/ and saves it to HTML-document or folder."""
-
-    check_args(amount, hash_length, save)
+    path = normalize_the_path(path)
+    check_args(amount, hash_length, save, path)
+    path += '\\parsePic'
     date = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
-    path = f'{os.getcwd()}\\parsePic\\'
     if html_save_method(save):
         page = prepare_page()
     else:
-        path += date
+        path += f'\\{date}'
     create_folders(path)
     count = 0
     while count < amount:
@@ -41,18 +44,24 @@ def main(amount, hash_length, save):
             count += 1
             print(count, link.url)
             if html_save_method(save):
-                save_html(page, link, date)
+                save_html(page, link, path, date)
             else:
                 save_picture(link, path, hash)
 
 
-def check_args(amount, hash_length, save):
+def normalize_the_path(path):
+    return os.path.abspath(path)
+
+
+def check_args(amount, hash_length, save, path):
     if not isinstance(amount, int) or amount < 0:
         raise SystemExit('The amount must be a number greater then 0')
     if not isinstance(hash_length, int) or hash_length not in (0, 5, 6, 7):
         raise SystemExit('The length must be a number between 5 and 7')
     if not isinstance(save, str) or save not in ('html', 'pic'):
         raise SystemExit('The save must be "html" or "pic"')
+    if not isinstance(path, str) or not os.path.exists(path):
+        raise SystemExit("The path doesn't exist")
 
 
 def html_save_method(save):
@@ -76,6 +85,7 @@ def prepare_page():
 def create_folders(path):
     if not os.path.exists(path):
         os.makedirs(path)
+        path += 'parsePic'
 
 
 def get_hash(hash_length):
@@ -90,10 +100,10 @@ def check_picture(link):
     return False
 
 
-def save_html(page, link, date):
+def save_html(page, link, path, date):
     with page:
         p(img(src=f'{link.url}'))
-    with open(f'parsePic\{date}.html', 'w') as html:
+    with open(f'{path}\\{date}.html', 'w') as html:
         html.write(page.render())
 
 

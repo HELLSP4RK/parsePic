@@ -21,5 +21,7 @@ Options:
   directory]\\parsePic\\_, but "html" saves it to _...\\[today's date].html document_, and "pic" saves it to
   _...\\[today's date] folder_. By default, it's equal to "html".
 
+  `-p, --path TEXT`            Where do you want to save the pictures? You can set the path to save in
+  _"C:\\path\\to\\directory"_ format. By default, it's equal to current working directory.
 
   `--help`                     Show this message and exit.
